@@ -1,0 +1,253 @@
+% !TEX program = lualatex
+% !TEX spellcheck = it_IT
+% !TEX root = ../TM.tex
+
+\section{Integrazione secondo Lebesgue}
+
+Diciamo che una funzione \(f : \Omega \to \erre\) è {\em semplice}\index{funzione!semplice} nel caso in cui la sua immagine abbia cardinalità finita, cioè \(f \Omega = \set{c_1, \dots{}, c_n}\). In generale, le fibre delle immagini di una funzione partizionano il dominio; nel nostro caso, abbiamo un numero finito  di fibre \(E_1 := f^{-1}\set{c_1}\), \dots{}, e \(E_n := f^{-1}\set{c_n}\) che partizionano \(\Omega\). Quindi le funzioni semplici sono funzioni \q{costanti a tratti}, cioè funzioni introdotte come segue
+\begin{equation}
+f(x) := \begin{cases}
+c_1 & \text{se } x \in E_1 \\
+\mathrel{\makebox[\widthof{\(c_i\)}]{\vdots{}}} & \mathrel{\makebox[\widthof{se \(x \in E_i\)}]{\vdots{}}} \\
+c_i & \text{se } x \in E_i \\
+\mathrel{\makebox[\widthof{\(c_i\)}]{\vdots{}}} & \mathrel{\makebox[\widthof{se \(x \in E_i\)}]{\vdots{}}} \\
+c_n & \text{se } x \in E_n
+\end{cases}\label{eqn:FunzioneCostanteATratti}
+\end{equation}
+Tuttavia, per funzioni con dominio \(\erre\), esiste un modo molto compatto e comodo di dire~\eqref{eqn:FunzioneCostanteATratti}. Per questo abbiamo bisogno di più notazione.
+
+Sia \(\Omega\) un qualsiasi insieme; ogni suo sottoinsieme \(A \subseteq \Omega\) ha una sua {\em funzione caratteristica}\index{funzione!caratteristica}
+\begin{align*}
+& \chi_A : \Omega \to \erre \\
+& \chi_A(x) := \begin{cases} 1 & \text{se } x \in A \\ 0 & \text{altrimenti} \end{cases}.
+\end{align*}
+%
+È immediato verificare che \(f : \Omega \to \erre\) è semplice se e solo se si può scrivere come combinazione finita di funzioni caratteristiche:
+\begin{align*}
+f(x) &= \sum_{i=1}^n c_i\chi_{E_i}(x) \\
+& \text{dove } E_i := f^{-1}\set{c_i}
+\end{align*}
+In realtà, si possono scegliere degli \(E_i\) che partizionino \(\Omega\) e che siano contenuti in qualche fibra di \(f\); noi scegliamo \(E_i = f^{-1}\set{c_i}\) per pura comodità.
+
+\begin{lemma}\label{lemma:FunzioniRealiLimitiPuntualiDiFunzioniSemplici}
+Per ogni funzione \(f : \Omega \to \erre\) esiste una successione di funzioni semplici \(\set{s_n : \Omega \to \erre \mid n \in \enne}\) tali che \(s_n \to f\) puntualmente. Se \(f\) è pure misurabile (ciò presuppone che \(\Omega\) sia uno spazio misurabile), allora le \(s_n\) possono essere scelte misurabili. Se \(f \ge 0\), allora la successione può essere presa crescente.
+\end{lemma}
+
+\begin{proof}
+Ricordiamo che ogni funzione \(\Omega \to \erre\) è la differenza tra la sua parte positiva e quella negativa, dove queste due sono entrambe non negative. Pertanto se riusciamo a costruire per ogni funzione \(f : \Omega \to \erre\) non negativa una successione di funzioni semplici convergenti puntualmente a \(f\) abbiamo finito. L'idea è di approssimare per difetto \(f : \Omega \to \erre\) con funzioni semplici di volta in volta più vicini a \(f\). Consideriamo, per \(n \in \enne\), gli insiemi
+\begin{align*}
+& E_{n,i} := f^{-1}\left[\frac{i}{2^n}, \frac{i+1}{2^n}\right) \quad \text{con } i \in \set{0, \dots{}, n2^n-1} \\
+& F_n := f^{-1}[n, +\infty) .
+\end{align*}
+Osserviamo che questi insiemi partizionano \(\Omega\). La suddivisione di \(\erre_{\ge 0}\) ha un senso: fissato un certo \(n\), l'unione degli intervalli \(\left[\frac{i}{2^n}, \frac{i+1}{2^n}\right)\) è \([0, n)\), e questo intervallo è suddiviso in sotto-intervalli di lunghezza \(\frac{1}{2^n}\). Consideriamo le funzioni semplici
+\begin{align*}
+& s_n : \Omega \to \erre \\
+& s_n(x) := \sum_{i=0}^{n2^n-1} \frac{i}{2^n} \chi_{E_{n, i}}(x) + n \chi_{F_n}(x) .
+\end{align*}
+Facciamo vedere la convergenza puntuale. Per costruzione, comunque preso \(x \in \Omega\), esiste \(n_x \in \enne\) per cui per ogni \(n \ge n_x\) si ha \(x\) sta in uno e un solo \(E_{n, i}\); allora, per \(n \ge n_x\), 
+\[\abs{f(x) - s_n(x)} = \underbrace{\abs{f(x) - \frac{i}{2^n}}}_{i \text{ è quello per cui } x \in E_{n, i}} < \abs{\frac{i+1}{2^n} -\frac{i}{2^n}} = \frac{1}{2^n} .\]
+Possiamo quindi concludere
+\[\lim_{n \to +\infty} s_n(x) = f(x) \quad \text{per ogni } x \in \Omega .\]
+Il resto della proposizione è semplice da dimostrare. Se \(f\) è misurabile, allora gli \(E_{n, i}\) e gli \(F_n\) sono insiemi misurabili, e quindi le \(s_n\) sono misurabili a causa della Proposizione~\ref{proposizione:ChiusuraFunzioniMisurabili}. Se \(f \ge 0\), allora è anche \(s_n \le s_{n+1}\) per ogni \(n \in \enne\).
+\end{proof}
+
+Ora per parlare di integrazione, entrano nel discorso le misure.
+
+\begin{definizione}[Integrale di funzioni misurabili]
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e \(s : \Omega \to \erre\) una semplice funzione misurabile, cioè
+\[s(x) = \sum_{i=1}^n c_i \chi_{E_i}(x)\]
+per opportuni \(E_1\), \dots{} e \(E_n\) misurabili che partizionano \(\Omega\). Chiamiamo {\em integrale} di \(s\) il numero (eventualmente infinito)
+\[\int s \mathrm d \mu := \sum_{i=1}^n c_i \mu(E_i) .\]
+%
+Sia ora \(f : \Omega \to \erre\) una funzione misurabile non negativa. L'{\em integrale} di \(f\) è il numero reale
+\[\int f \mathrm d \mu := \sup_{\substack{ s : \Omega \to \erre \text{ semplice,} \\ \text{misurabile e } 0 \le s \le f}} \int_\Omega s \mathrm d \mu .\]
+Qualora sia un numero reale eventualmente infinito, l'{\em integrale} ({\em di Lebesgue})\index{integrale di Lebesgue} di una funzione misurabile qualsiasi \(f : \Omega \to \erre\) è
+\[\int f \mathrm d \mu := \int f_+ \mathrm d \mu - \int f_- \mathrm d \mu .\]
+Molto spesso però, si vuole integrare solo sua una parte del dominio: se \(E \in \mathcal A\), allora
+\[\int_E f \mathrm d \mu := \int \chi_E f \mathrm d \mu .\]
+Una funzione misurabile \(f : \Omega \to \erre\) si dice {\em integrabile} su \(E \subseteq \Omega\) misurabile se e solo se sono finiti \(\int_E f_+ \mathrm d \mu\) e \(\int_E f_- \mathrm d \mu\).
+\end{definizione}
+
+Un criterio molto semplice per verificare l'integrabilità di una funzione misurabile è il seguente.
+
+\begin{proposizione}\label{proposizione:SempliceCriterioIntegrabilità}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura, \(f : \Omega \to \erre\) misurabile e \(E \in \mathcal A\). Se esiste una funzione misurabile \(g : \Omega \to \erre\) che sia integrabile su \(E\) e che \(\abs f \le g\) su \(E\), allora \(f\) è integrabile su \(E\).
+\end{proposizione}
+
+\begin{proof}
+Infatti dalle ipotesi segue che \(0 \le f_+, f_- \le g\) e quindi \(\int_E f_+ \mathrm d \mu\) e \(\int_E f_- \mathrm d \mu\) sono compresi tra \(0\) e \(\int_E g \mathrm d \mu\), che è finito.
+%\[0 \le \int_E f_+ \mathrm d \mu, \int_E f_- \mathrm d \mu \le \int_E g \mathrm d \mu < +\infty .\qedhere\]
+\end{proof}
+
+\nota{Fare esempi di funzioni integrabili. È troppo presto?}
+
+\begin{lemma}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e \(f : \Omega \to \erre\) una funzione semplice, misurabile e non negativa. Allora
+\begin{align*}
+& \nu : \mathcal A \to [0, +\infty] \\
+& \nu(E) := \int_E f \mathrm d \mu
+\end{align*}
+è una misura per lo spazio misurabile \((\Omega, \mathcal A)\).
+\end{lemma}
+
+\begin{proof}
+È banale verificare che \(\nu(\nil) = 0\). Sia ora \(\set{A_n \mid n \in \enne}\) una successione di elementi di \(\mathcal A\) a due a due disgiunti. Per comodità, \(A := \bigcup_{n \in \enne} A_n\). Inoltre, se \(f : \Omega \to \erre\) è semplice,
+\[f = \sum_{i=1}^k c_i \chi_{E_i}\]
+con gli \(E_i\) che partizionano \(\Omega\) e \(c_1, \dots{}, c_n \in \erre\). Osserviamo inoltre che (è facile da dimostrare)
+\[\int \chi_E f \mathrm d \mu = \left(\int f \mathrm d \mu\right) \chi_E\]
+con \(E \in \mathcal A\) qualsiasi. Abbiamo quindi che
+\[\int_A f \mathrm d \mu = \int \chi_A f \mathrm d \mu = \underbrace{\left(\int f \mathrm d \mu\right) \chi_A = \sum_{n \in \enne} \left(\int f \mathrm d \mu\right) \chi_{A_n}}_{\text{le funzioni caratteristiche sono misure}} = \sum_{n \in \enne} \int_{A_n} f \mathrm d\mu. \qedhere\]
+\end{proof}
+
+Con la proposizione che segue togliamo l'ipotesi della semplicità.
+
+\begin{proposizione}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e \(f : \Omega \to \erre\) misurabile e non negativa. Allora la funzione
+\begin{align*}
+& \nu : \mathcal A \to [0, +\infty] \\
+& \nu(E) := \int_E f \mathrm d \mu
+\end{align*}
+è una misura per lo spazio misurabile \((\Omega, \mathcal A)\).
+\end{proposizione}
+
+\begin{proof}
+È immediato vedere che \(\nu(\nil) = 0\). Sia ora una \(\set{A_n \mid n \in \enne}\) una successione di elementi \(\mathcal A\) a due a due disgiunti, e per comodità \(A := \bigcup_{n \in \enne} A_n\). Facciamo vedere che \(\nu (A) = \sum_{n \in \enne} \nu(A_n)\), vale a dire 
+\[\int_A f \mathrm d \mu = \sum_{n \in \enne} \int_{A_n} f \mathrm d \mu .\]
+Per ogni funzione semplice, misurabile e tale che \(0 \le s \le f\) si ha
+\[\sum_{n \in \enne} \int_{A_n} f \mathrm d \mu \ge \underbrace{\sum_{n \in \enne} \int_{A_n} s \mathrm d \mu = \int_A s \mathrm d \mu}_{\text{vedi lemma precedente}}\]
+e quindi, per definizione di integrale, \(\sum_{n \in \enne} \nu(A_n) \ge \nu(A)\).\newline
+%\[\sum_{n \in \enne} \int_{A_n} f \mathrm d \mu \ge \int_A f \mathrm d \mu .\]
+Rimane solo da provare la disuguaglianza opposta. Osserviamo preliminarmente che se qualche \(\nu(A_n)\) è infinito, allora, questa disuguaglianza è verificata. Ragione per cui d'ora in poi si suppone che tutti gli \(\nu(A_n)\) siano finiti. Fissato \(\varepsilon > 0\), per qualsiasi \(n \in \enne\) si ha che esiste una funzione \(s_n : \Omega \to \erre\) semplice, misurabile e tale che \(0 \le s_n \le f\) per cui
+\[\int_{A_n} f \mathrm d \mu - \frac \varepsilon n \le \int_{A_n} s_n \mathrm d \mu .\]
+Se ne deduce che
+\[\sum_{n=0}^k \int_{A_n} f \mathrm d \mu - \varepsilon \le \underbrace{\sum_{n=0} \int_{A_n} s_n \mathrm d \mu = \int_{\bigcup_{n=1}^k A_n} \left( \sum_{n=1}^k \chi_{A_n} s_n \right) \mathrm d \mu}_{\text{esercizio}} \le \int_{\bigcup_{n=1}^k A_n} f \mathrm d \mu .\]
+E quindi per l'arbitrarietà di \(\varepsilon > 0\) si ha
+\[\sum_{n=0}^k \int_{A_n} f \mathrm d \mu \le \int_{\bigcup_{n=1}^k A_n} f \mathrm d \mu .\]
+Pertanto per ogni \(k \in \enne\) si ha
+\[\sum_{n=0}^k \nu(A_k) \le \nu\left(\bigcup_{n=1}^k A_n\right) \le \nu(A) \]
+e, a maggior ragione, \(\sum_{n \in \enne} \nu(A_n) \le \nu(A)\). Dove è stata usata la non negatività di \(f\)? \(\sum_{n \in \enne} \nu(A_n)\) è una serie che converge oppure diverge a \(+\infty\) dato che i singoli \(\nu(A_n) \ge 0\) proprio perché \(f \ge 0\).
+\end{proof}
+
+\begin{corollario}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e \(f : \Omega \to \erre\) una funzione misurabile e integrabile. Allora per ogni successione \(\set{A_n \mid n \in \enne}\) di elementi di \(\mathcal A\) a due a due disgiunti si ha
+\[\int_{\bigcup_{n \in \enne} A_n} f \mathrm d \mu = \sum_{n \in \enne} \int_{A_n} f \mathrm d \mu .\]
+\end{corollario}
+
+\begin{proposizione}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura, \(E \in \mathcal A\) e \(f : \Omega \to \erre\) una funzione misurabile e integrabile. Allora \(\abs f\) è integrabile su \(E\) e
+\[\abs{\int_E f \mathrm d \mu} \le \int_E \abs f \mathrm d \mu .\]
+\end{proposizione}
+
+Uno potrebbe pensare di procedere così. Si ricorda che \(\abs f = f_+ + f_-\), e poi di fare
+\[\int_A f \mathrm d \mu = \int_A f_+ \mathrm d \mu + \int_A f_- \mathrm d \mu .\]
+Il punto è questo fatto verrà provato solo dopo aver provato qualche risultato sulla convergenza. Si potrebbe dimostrare questo teorema una volta arrivati là, ma si può fare anche già adesso.
+
+\begin{proof}
+\(E\) è partizionato egli insiemi misurabili \(E_1 := \set{x \in A \mid f(x) \ge 0}\) ed \(E_2 := \set{x \in A \mid f(x) < 0}\). Abbiamo visto poi che se \(f\) è misurabile allora pure \(\abs f\) lo è. In questo caso,
+\[\int_A \abs f \mathrm d \mu = \int_{E_1} \abs f \mathrm d \mu + \int_{E_2} \abs f \mathrm d \mu = \int_{E_1} f \mathrm d \mu + \int_{E_2} (-f) \mathrm d \mu\]
+e quindi \(\abs f\) è integrabile sopra \(E\). Rimangono dei conti da fare:
+\[\int_E \abs f \mathrm d \mu = \underbrace{\int_E \abs f \mathrm d \mu}_{\int_E f_+ \mathrm d \mu} + \underbrace{\int_E \abs f \mathrm d \mu}_{\int_E f_- \mathrm d \mu} \ge \abs{\int_E f_+ \mathrm d \mu - \int_E f_- \mathrm d \mu} = \abs{\int_E f \mathrm d \mu} .\qedhere\]
+\end{proof}
+
+\begin{proposizione}[Teorema di Beppo-Levi, o della \q{convergenza dominata}]\label{proposizione:BeppoLevi}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e \(\set{f_n : \Omega \to \erre \mid n \in \enne}\) una successione crescente di funzioni misurabili e non negative. Considerata la funzione
+\begin{align*}
+& f : \Omega \to \erre \\
+& f(x) := \lim_{n \to +\infty} f_n(x)
+\end{align*}
+si ha, per \(E \in \mathcal A\),
+\[\int_E f \mathrm d \mu = \lim_{n \to +\infty} \int_E f_n \mathrm d \mu .\]
+\end{proposizione}
+
+Vale la pena osservare che, essendo la successione di funzioni crescente, lo è anche la successione degli integrali \(\int_E f \mathrm d \mu\): ragione per cui il limite \(\lim_{n \to +\infty} \int_E f_n \mathrm d \mu\) è definito.
+
+\begin{proof}
+Poiché la successione è crescente, sia ha subito che \(\int_E f_n \mathrm d \mu \le \int_E f \mathrm d \mu\) e quindi la disuguaglianza
+\[\lim_{n \to +\infty} \int_E f_n \mathrm d \mu \le \int_E f \mathrm d \mu .\]
+Proviamo la disuguaglianza opposta. Per pura comodità, \(\alpha := \lim_{n \to +\infty} \int_E f_n \mathrm d \mu\). Se proviamo che \(\alpha \ge \int_E s \mathrm d \mu\) per ogni funzione misurabile semplice \(s : \Omega \to \erre\) tale che \(0 \le s \le f\), possiamo anche che \(\alpha \ge \int_E f \mathrm d \mu\). Consideriamo infatti una qualsiasi di queste funzioni. Preso \(\delta \in (0, 1)\) gli insiemi misurabili
+\[E_n := \set{x \in E \mid f_n(x) \ge \delta s(x)}\]
+sono tali che \(E_n \subseteq E_{n+1}\) per ogni \(n \in \enne\) e ricoprono \(E\) (quest'ultimo è un semplice fatto pertinente i limiti di successione). Quindi
+\[\int_E f_n \mathrm d \mu \ge \int_{E_n} f_n \mathrm d \mu \ge \int_{E_n} \delta s \mathrm d \mu \ge \delta \int_{E_n} s \mathrm d \mu \ge \delta \int_{\bigcup_{i=0}^n E_i} s \mathrm d \mu .\]
+Dato che ciò accade per ogni \(n \in \enne\) e \(\delta \in (0, 1)\), possiamo dire di aver provato anche la disuguaglianza restante.
+\end{proof}
+
+Possiamo ora dimostrare un fatto veramente classico.
+
+\begin{corollario}
+Se due funzioni misurabili \(f, g : \Omega \to \erre\) sono integrabili, allora pure \(f+g\) lo è e
+\[\int_E (f+g) \mathrm d \mu = \int_E f \mathrm d \mu + \int_E g \mathrm d \mu\]
+per ogni \(E \subseteq \Omega\) misurabile.
+\end{corollario}
+
+\begin{proof}
+Anzitutto, \(f+g\) è misurabile, perché lo sono i singoli addendi. Supponiamo preliminarmente \(f, g \ge 0\). Per il Lemma~\ref{lemma:FunzioniRealiLimitiPuntualiDiFunzioniSemplici}, possimao scegliere due successioni \(\set{f_n : \Omega \to \erre \mid n \in \enne}\) e \(\set{g_n : \Omega \to \erre \mid n \in \enne}\) crescenti di funzioni misurabili e non negative convergenti puntualmente a \(f\) e a \(g\) rispettivamente. Siamo nelle ipotesi della Proposizione~\ref{proposizione:BeppoLevi}, e quindi
+\[\int_E (f+g) \mathrm d \mu = \lim_{n \to +\infty} \int_E (f_n + g_n) \mathrm d \mu .\]
+Ora è facile verificare che \(\int_E (f_n + g_n) \mathrm d \mu = \int_E f_n \mathrm d \mu + \int_E g_n \mathrm d \mu\). Applicando di nuovo la Proposizione~\ref{proposizione:BeppoLevi}, abbiamo
+\[\int_E (f+g) \mathrm d \mu = \lim_{n \to +\infty} \int_E f_n \mathrm d \mu + \lim_{n \to +\infty} \int_E g_n \mathrm d \mu = \int_E f \mathrm d \mu + \int_E g \mathrm d \mu .\]
+In particolare, ricaviamo che la somma di sue funzioni integrabili non negative è integrabile. Possiamo a questo punto verificare pure l'integrabilità di \(f+g\) senza l'ipotesi aggiuntiva non negatività delle due funzioni. Sappiamo che \(\abs f\) e \(\abs g\) sono integrabili perché lo sono \(f\) e \(g\). Ora \(\abs{f+g} \le \abs f + \abs g\) dove
+\[\int_E (\abs f + \abs g) \mathrm d \mu = \underbrace{\int_E \abs f \mathrm d \mu + \int_E \abs g \mathrm d \mu < +\infty}_{\text{perché \(f\) e \(g\) sono integrabili}} .\]
+La Proposizione~\ref{proposizione:SempliceCriterioIntegrabilità} ci permette di dire che \(f+g\) è integrabile.
+%Se \(f, g \le 0\), allora usando lo stesso ragionamento di poc'anzi con \(-f\) al posto di \(f\) e \(-g\) al posto di \(g\), si ottiene facilmente la tesi in questo caso. Se \(f \ge 0\) e \(g \le 0\), allora possiamo scrivere \(f+g = f-(-g)\), dove \(-g \ge 0\); si può quindi usare l'argomento appena impiegato con \(-g\) al posto di \(g\). Anche il caso \(f \le 0\) e \(g \ge 0\) si esaurisce così.
+Possiamo quindi dimostrare la proposizione nel caso generale di \(f\) e \(g\) di segno variabile, ricordando che le funzioni \(\Omega \to \erre\) possono essere scritte come differenza di funzioni non negative, \(f = f_+ - f_-\) e \(g = g_+ - g_-\). Quindi
+\begin{align*}
+\int_E (f+g) \mathrm d \mu &= \int_E [(f_+ + g_+) - (f_-+g_-)] \mathrm d \mu = \\
+&= \int_E (f_+ + g_+) \mathrm d \mu  - \int_E (f_-+g_-) \mathrm d \mu = \\
+&= \int_E f_+ \mathrm d \mu + \int_E g_+ \mathrm d \mu  - \int_E f_- \mathrm d \mu - \int_E g_- \mathrm d \mu = \\
+&= \int_E f \mathrm d \mu + \int_E g \mathrm d \mu 
+\end{align*}
+e abbiamo concluso.
+\end{proof}
+
+\begin{lemma}[di Fatou]\label{lemma:Fatou}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e prendiamo una successione \(\set{f_n : \Omega \to \erre \mid n \in \enne}\) di funzioni misurabili e non negative su un \(E \in \mathcal A\). Allora, preso
+\begin{align*}
+& f : \Omega \to \erre \\
+& f(x) := \liminf_{n \to +\infty} f_n(x) ,
+\end{align*}
+si ha
+\[\int_E f \mathrm d \mu \le \liminf_{n \to +\infty} \int_E f_n \mathrm d \mu .\]
+\end{lemma}
+
+Qualche volta, al posto della disuguaglianza appena scritta si scrive
+\[\int_E \left(\liminf_{n \to +\infty} f_n\right) \mathrm d \mu \le \liminf_{n \to +\infty} \int_E f_n \mathrm d \mu\]
+per dire che il \(\liminf_{n \to +\infty}\) non proprio si può tirare fuori dall'integrale.
+
+Per comodità, richiamiamo come è definito il {\em limite inferiore} di una successione:
+\[\liminf_{n \to +\infty} x_n := \lim_{n \to +\infty} \left(\inf_{m \ge n} x_m\right) .\]
+Ricordiamo anche che, essendo \(\set{\inf_{m \ge n} x_m \mid n \in \enne}\) una successione crescente, questo oggetto è sempre definito (finito od al più infinito). Inoltre è immediato verificare che se una successione ha limite, allora questo coincide con il suo limite inferiore.
+
+\begin{proof}[Dimostrazione del Lemma~\ref{lemma:Fatou}]
+\nota{Questa è una cosa di cui scrivere\dots{}} Sappiamo che \(f\) è misurabile; ovviamente è anche non negativa. Anche \(g_n : \Omega \to \erre\), \(g_n(x) := \inf_{m \ge n} f_m(x)\) è misurabile \nota{anche di questa cosa bisogna scrivere\dots{}}; inoltre è non negativa e crescente. Quindi per il Teorema di Beppo-Levi (Proposizione~\ref{proposizione:BeppoLevi}) si ha
+\[\int_E f \mathrm d \mu = \lim_{n \to +\infty} \int_E g_n \mathrm d \mu = \liminf_{n \to +\infty} \int_E g_n \mathrm d \mu \le \liminf_{n \to +\infty} \int_E f_n \mathrm d \mu \qedhere\]
+\end{proof}
+
+\begin{proposizione}[Teorema di Beppo-Levi II]\label{proposizione:BeppoLevi2}
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura, \(E \in \mathcal A\) e consideriamo una successione monotona \(\set{f_n : \Omega \to \erre \mid n \in \enne}\) di funzioni integrabili su \(E\) e tali che la successione \(\set{\left. \int_E f_n \mathrm d \mu \right \mid n \in \enne}\) sia limitata. Presa
+\begin{align*}
+& f : \Omega \to \erre \\
+& f(x) := \lim_{n \to +\infty} f_n(x) ,
+\end{align*}
+si ha che \(f\) è integrabile su \(E\) e
+\[\int_E f \mathrm d \mu = \lim_{n \to +\infty} \int_E f_n \mathrm d \mu .\]
+\end{proposizione}
+
+Una delle conclusioni di questa proposizione ricorda la Proposizione~\ref{proposizione:BeppoLevi}: in più però fornisce un criterio per verificare l'integrabilità di una funzione. Questo però non viene senza fatica perché bisogna trovare una successione che di funzioni che converga puntualmente verso di lei, ma nel caso di serie può fare molto comodo.
+
+\begin{proof}[Dimostrazione Proposizione~\ref{proposizione:BeppoLevi2}]
+Supponiamo che le \(f_n\) siano crescenti, se sono decrescenti si procede analogamente. Qui \(f_n - f_0 \ge 0\) per ogni \(n \in \enne\); la successione \(\set{f_n-f_0 \mid n \in \enne}\) è crescente e di funzioni misurabili non negative. Per la Proposizione~\ref{proposizione:BeppoLevi} si ha 
+\[\lim_{n \to + \infty} \int_E (f_n-f_0) \mathrm d \mu = \int_E (f-f_0) \mathrm d \mu .\]
+Poiché il primo membro è finito, allora \(f-f_0\) è integrabile in \(E\), e quindi lo è pure \(f\). La conclusione è immediata. \nota{Ma quindi non serve il Lemma di Fatou?}
+\end{proof}
+
+\begin{lemma}[di Lebesgue-Fatou]
+\nota{Ancora da \TeX{}are\dots{}}
+\end{lemma}
+
+\begin{proposizione}[Teorema di Lebesgue della convergenza dominata]
+Sia \((\Omega, \mathcal A, \mu)\) uno spazio di misura e \(\set{f_n : \Omega \to \erre \mid n \in \enne}\) una successione di funzioni misurabili convergenti puntualmente a \(f : \Omega \to \erre\). Se esiste \(g : \Omega \to \erre\) misurabile che sia integrabile e tale che \(\abs{f_n} \le g\) per ogni \(n \in \enne\), allora \(f\) è integrabile e
+\[\int_\Omega f \mathrm d \mu = \lim_{n \to +\infty} \int_\Omega f_n \mathrm d \mu .\]
+\end{proposizione}
+
+\begin{proof}
+\nota{Ancora da \TeX{}are\dots{}}
+\end{proof}
